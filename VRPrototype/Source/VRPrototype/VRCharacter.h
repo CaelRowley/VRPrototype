@@ -29,9 +29,9 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* VRRoot;
 
 	void MoveForward(float throttle);
 	void MoveSide(float throttle);
-
-	void Test(float throttle);
 };
