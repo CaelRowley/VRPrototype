@@ -38,10 +38,11 @@ void AVRCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector NewCameraOffset = Camera->GetComponentLocation() - GetActorLocation();
-	NewCameraOffset.Z = 0;
-	AddActorWorldOffset(NewCameraOffset);
-	VRRoot->AddWorldOffset(-NewCameraOffset);
+	// TODO: should set player capsule to headset location but causes constant movement
+	//FVector NewCameraOffset = Camera->GetComponentLocation() - GetActorLocation();
+	//NewCameraOffset.Z = 0;
+	//AddActorWorldOffset(NewCameraOffset);
+	//VRRoot->AddWorldOffset(-NewCameraOffset);
 
 	UpdateDestinationMarker();
 }
