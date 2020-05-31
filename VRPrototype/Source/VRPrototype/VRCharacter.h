@@ -37,7 +37,11 @@ private:
 	void UpdateDestinationMarker();
 ;	void MoveForward(float throttle);
 	void MoveSide(float throttle);
+	void BeginTeleport();
+	void FinishTeleport();
 
 	UPROPERTY(EditAnywhere)
 	float MaxTeleportDistance = 1000;
+	UPROPERTY(EditAnywhere)
+	float TeleportFadeTime = 0.5;
 };
