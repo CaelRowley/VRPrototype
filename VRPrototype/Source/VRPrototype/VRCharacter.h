@@ -33,11 +33,16 @@ private:
 	class USceneComponent* VRRoot;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* DestinationMarker;
+	UPROPERTY()
+	class UPostProcessComponent* PostProcessComponent;
+	UPROPERTY()
+	class UMaterialInstanceDynamic* BlinkerMaterialInstance;
 
 	bool FindTeleportDestination(FVector& OutLocation);
 	void StartFade(float fromAlpha, float toAlpha);
-
 	void UpdateDestinationMarker();
+	void UpdateBlinkers();
+
 ;	void MoveForward(float throttle);
 	void MoveSide(float throttle);
 
@@ -50,4 +55,8 @@ private:
 	float TeleportFadeTime = 0.5;
 	UPROPERTY(EditAnywhere)
 	FVector TeleportProjectionExtent = FVector(100, 100, 100);
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* BlinkerMaterialBase;
+	UPROPERTY(EditAnywhere)
+	class UCurveFloat* RadiusVsVelocity;
 };

@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "VRCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "TimerManager.h"
 #include "NavigationSystem.h"
+#include "Components/PostProcessComponent.h"
+#include "Materials/MaterialInterface.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -22,6 +24,9 @@ AVRCharacter::AVRCharacter()
 
 	DestinationMarker = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DestinationMarker"));
 	Camera->SetupAttachment(GetRootComponent());
+
+	PostProcessComponent = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
+	Camera->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -31,6 +36,9 @@ void AVRCharacter::BeginPlay()
 	
 	bUseControllerRotationPitch = true;
 	DestinationMarker->SetVisibility(false);
+
+	BlinkerMaterialInstance = UMaterialInstanceDynamic::Create(BlinkerMaterialBase, this);
+	PostProcessComponent->AddOrUpdateBlendable(BlinkerMaterialInstance);	
 }
 
 // Called every frame
@@ -45,6 +53,7 @@ void AVRCharacter::Tick(float DeltaTime)
 	//VRRoot->AddWorldOffset(-NewCameraOffset);
 
 	UpdateDestinationMarker();
+	UpdateBlinkers();
 }
 
 // Called to bind functionality to input
@@ -87,6 +96,13 @@ void AVRCharacter::UpdateDestinationMarker()
 
 	DestinationMarker->SetVisibility(bHasDestination);
 	DestinationMarker->SetWorldLocation(Location);
+}
+
+void AVRCharacter::UpdateBlinkers()
+{
+	float Speed = GetVelocity().Size();
+	float Radius = RadiusVsVelocity->GetFloatValue(Speed);
+	BlinkerMaterialInstance->SetScalarParameterValue(TEXT("Radius"), Radius);
 }
 
 void AVRCharacter::MoveForward(float throttle)
