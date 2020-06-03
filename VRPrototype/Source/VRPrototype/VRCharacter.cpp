@@ -16,7 +16,7 @@ AVRCharacter::AVRCharacter()
 
 	VRRoot = CreateDefaultSubobject<USceneComponent>(TEXT("VRRoot"));
 	VRRoot->SetupAttachment(GetRootComponent());
-
+	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(VRRoot);
 
@@ -110,7 +110,7 @@ void AVRCharacter::BeginTeleport()
 
 void AVRCharacter::FinishTeleport()
 {
-	SetActorLocation(DestinationMarker->GetComponentLocation() + GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+	SetActorLocation(DestinationMarker->GetComponentLocation() + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()));
 	StartFade(1, 0);
 }
 
