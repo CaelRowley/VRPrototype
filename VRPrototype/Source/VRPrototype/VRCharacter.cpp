@@ -105,12 +105,13 @@ void AVRCharacter::BeginTeleport()
 
 	StartFade(0, 1);
 	FTimerHandle Handle;
-	GetWorldTimerManager().SetTimer(Handle, this, &AVRCharacter::FinishTeleport, TeleportFadeTime);
+	FTimerDelegate FinishTeleportDelegate = FTimerDelegate::CreateUObject(this, &AVRCharacter::FinishTeleport, DestinationMarker->GetComponentLocation());
+	GetWorldTimerManager().SetTimer(Handle, FinishTeleportDelegate, TeleportFadeTime, false);
 }
 
-void AVRCharacter::FinishTeleport()
+void AVRCharacter::FinishTeleport(FVector destination)
 {
-	SetActorLocation(DestinationMarker->GetComponentLocation() + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()));
+	SetActorLocation(destination + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()));
 	StartFade(1, 0);
 }
 

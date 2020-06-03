@@ -42,7 +42,7 @@ private:
 	void MoveSide(float throttle);
 
 	void BeginTeleport();
-	void FinishTeleport();
+	void FinishTeleport(FVector destination);
 
 	UPROPERTY(EditAnywhere)
 	float MaxTeleportDistance = 1000;
