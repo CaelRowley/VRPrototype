@@ -10,16 +10,17 @@
 #include "Materials/MaterialInterface.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "MotionControllerComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	VRRoot = CreateDefaultSubobject<USceneComponent>(TEXT("VRRoot"));
 	VRRoot->SetupAttachment(GetRootComponent());
-	
+
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(VRRoot);
 
@@ -43,12 +44,12 @@ AVRCharacter::AVRCharacter()
 void AVRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	bUseControllerRotationPitch = true;
 	DestinationMarker->SetVisibility(false);
 
 	BlinkerMaterialInstance = UMaterialInstanceDynamic::Create(BlinkerMaterialBase, this);
-	PostProcessComponent->AddOrUpdateBlendable(BlinkerMaterialInstance);	
+	PostProcessComponent->AddOrUpdateBlendable(BlinkerMaterialInstance);
 }
 
 // Called every frame
@@ -70,7 +71,7 @@ void AVRCharacter::Tick(float DeltaTime)
 void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
+
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AVRCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveBack"), this, &AVRCharacter::MoveBack);
 	PlayerInputComponent->BindAxis(TEXT("MoveLeft"), this, &AVRCharacter::MoveLeft);
@@ -79,22 +80,34 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AVRCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AVRCharacter::AddControllerPitchInput);
 
-	PlayerInputComponent->BindAction(TEXT("Teleport"), IE_Released ,this, &AVRCharacter::BeginTeleport);
+	PlayerInputComponent->BindAction(TEXT("Teleport"), IE_Released, this, &AVRCharacter::BeginTeleport);
 }
 
 bool AVRCharacter::FindTeleportDestination(FVector& OutLocation)
 {
 	FVector Start = RightController->GetComponentLocation();
 	FVector Look = RightController->GetForwardVector();
-	Look = Look.RotateAngleAxis(35, RightController->GetRightVector());
-	FVector End = Start + Look * MaxTeleportDistance;
-	FHitResult HitResult;
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility);
+	//Look = Look.RotateAngleAxis(35, RightController->GetRightVector());
+
+	FPredictProjectilePathParams PathParams(
+		TeleportProjectileRadius,
+		Start,
+		Look * TeleportProjectileSpeed,
+		TeleportSimultionTime,
+		ECollisionChannel::ECC_Visibility,
+		this
+	);
+	PathParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
+	PathParams.bTraceComplex = true;
+	FPredictProjectilePathResult PathResult;
+	UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
+
+	bool bHit = UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
 
 	if (!bHit) return false;
 
 	FNavLocation NavLocation;
-	bool bOnNavMesh = UNavigationSystemV1::GetCurrent(GetWorld())->ProjectPointToNavigation(HitResult.Location, NavLocation, TeleportProjectionExtent);
+	bool bOnNavMesh = UNavigationSystemV1::GetCurrent(GetWorld())->ProjectPointToNavigation(PathResult.HitResult.Location, NavLocation, TeleportProjectionExtent);
 
 	if (!bOnNavMesh) return false;
 

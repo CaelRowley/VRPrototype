@@ -57,7 +57,11 @@ private:
 	void FinishTeleport(FVector destination);
 
 	UPROPERTY(EditAnywhere)
-	float MaxTeleportDistance = 1000;
+	float TeleportProjectileSpeed = 800;
+	UPROPERTY(EditAnywhere)
+	float TeleportProjectileRadius = 10;
+	UPROPERTY(EditAnywhere)
+	float TeleportSimultionTime = 1;
 	UPROPERTY(EditAnywhere)
 	float TeleportFadeTime = 0.5;
 	UPROPERTY(EditAnywhere)
