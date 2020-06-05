@@ -42,9 +42,12 @@ private:
 	void StartFade(float fromAlpha, float toAlpha);
 	void UpdateDestinationMarker();
 	void UpdateBlinkers();
+	FVector2D GetBlinkerCentre();
 
-;	void MoveForward(float throttle);
-	void MoveSide(float throttle);
+	void MoveForward(float throttle);
+	void MoveBack(float throttle);
+	void MoveLeft(float throttle);
+	void MoveRight(float throttle);
 
 	void BeginTeleport();
 	void FinishTeleport(FVector destination);

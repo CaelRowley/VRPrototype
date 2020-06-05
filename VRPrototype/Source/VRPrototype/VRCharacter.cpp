@@ -62,7 +62,9 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AVRCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveSide"), this, &AVRCharacter::MoveSide);
+	PlayerInputComponent->BindAxis(TEXT("MoveBack"), this, &AVRCharacter::MoveBack);
+	PlayerInputComponent->BindAxis(TEXT("MoveLeft"), this, &AVRCharacter::MoveLeft);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AVRCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AVRCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AVRCharacter::AddControllerPitchInput);
@@ -103,17 +105,67 @@ void AVRCharacter::UpdateBlinkers()
 	float Speed = GetVelocity().Size();
 	float Radius = RadiusVsVelocity->GetFloatValue(Speed);
 	BlinkerMaterialInstance->SetScalarParameterValue(TEXT("Radius"), Radius);
+
+	FVector2D Centre = GetBlinkerCentre();
+	BlinkerMaterialInstance->SetVectorParameterValue(TEXT("Centre"), FLinearColor(Centre.X, Centre.Y, 0));
+}
+
+FVector2D AVRCharacter::GetBlinkerCentre()
+{
+	FVector MoveDirection = GetVelocity().GetSafeNormal();
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+	if (MoveDirection.IsNearlyZero() || PlayerController == nullptr) {
+		return FVector2D(0.5, 0.5);
+	}
+
+
+	if (FVector::DotProduct(Camera->GetForwardVector(), MoveDirection) <= 0) MoveDirection *= -1;
+	FVector WorldStationaryLocation = Camera->GetComponentLocation() + MoveDirection * 1000;
+
+	FVector2D ScreenStationaryLocation;
+	PlayerController->ProjectWorldLocationToScreen(WorldStationaryLocation, ScreenStationaryLocation, true);
+
+	int32 SizeX, SizeY;
+	PlayerController->GetViewportSize(SizeX, SizeY);
+	ScreenStationaryLocation.X /= SizeX;
+	ScreenStationaryLocation.Y /= SizeY;
+
+	return ScreenStationaryLocation;
 }
 
 void AVRCharacter::MoveForward(float throttle)
 {
+	if (throttle != 0) {
+		UE_LOG(LogTemp, Warning, TEXT("MoveForward: %f"), throttle);
+	}
 	AddMovementInput(throttle * Camera->GetForwardVector());
 }
 
-void AVRCharacter::MoveSide(float throttle)
+void AVRCharacter::MoveBack(float throttle)
 {
+	if (throttle != 0) {
+		UE_LOG(LogTemp, Warning, TEXT("MoveBack: %f"), throttle);
+	}
+	AddMovementInput(throttle * Camera->GetForwardVector());
+}
+
+void AVRCharacter::MoveLeft(float throttle)
+{
+	if (throttle != 0) {
+		UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), throttle);
+	}
 	AddMovementInput(throttle * Camera->GetRightVector());
 }
+
+void AVRCharacter::MoveRight(float throttle)
+{
+	if (throttle != 0) {
+		UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), throttle);
+	}
+	AddMovementInput(throttle * Camera->GetRightVector());
+}
+
 
 void AVRCharacter::BeginTeleport()
 {

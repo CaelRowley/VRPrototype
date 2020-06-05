@@ -80,6 +80,22 @@
 		{
 			"name": "/actions/main/in/Teleport",
 			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/MoveForward axis",
+			"type": "vector1"
+		},
+		{
+			"name": "/actions/main/in/MoveBack axis",
+			"type": "vector1"
+		},
+		{
+			"name": "/actions/main/in/MoveLeft axis",
+			"type": "vector1"
+		},
+		{
+			"name": "/actions/main/in/MoveRight axis",
+			"type": "vector1"
 		}
 	],
 	"action_sets": [
@@ -197,6 +213,10 @@
 			"/actions/main/out/vibrateright": "Haptic (Right)",
 			"/actions/main/in/open_console": "Open Console",
 			"/actions/main/in/Teleport": "Teleport",
+			"/actions/main/in/MoveForward axis": "MoveForward",
+			"/actions/main/in/MoveBack axis": "MoveBack",
+			"/actions/main/in/MoveLeft axis": "MoveLeft",
+			"/actions/main/in/MoveRight axis": "MoveRight",
 			"/actions/main": "Main Game Actions"
 		}
 	]
