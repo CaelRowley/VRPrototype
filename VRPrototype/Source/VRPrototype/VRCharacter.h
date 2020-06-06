@@ -30,22 +30,31 @@ private:
 	UPROPERTY()
 	class UCameraComponent* Camera;
 	UPROPERTY()
+	class USceneComponent* VRRoot;
+
+	UPROPERTY()
 	class UMotionControllerComponent* LeftController;
 	UPROPERTY()
 	class UMotionControllerComponent* RightController;
-	UPROPERTY()
-	class USceneComponent* VRRoot;
+
+	UPROPERTY(VisibleAnywhere)
+	class USplineComponent* TeleportPath;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* DestinationMarker;
 	UPROPERTY()
 	class UPostProcessComponent* PostProcessComponent;
 	UPROPERTY()
 	class UMaterialInstanceDynamic* BlinkerMaterialInstance;
+	UPROPERTY()
+	TArray<class UStaticMeshComponent*> TeleportPathMeshPool;
 
-	bool FindTeleportDestination(FVector& OutLocation);
+
+	bool FindTeleportDestination(TArray<FVector> &OutPath, FVector& OutLocation);
 	void StartFade(float fromAlpha, float toAlpha);
 	void UpdateDestinationMarker();
 	void UpdateBlinkers();
+	void DrawTeleportPath(const TArray<FVector>& Path);
+	void UpdateSpline(const TArray<FVector>& Path);
 	FVector2D GetBlinkerCentre();
 
 	void MoveForward(float throttle);
@@ -55,6 +64,7 @@ private:
 
 	void BeginTeleport();
 	void FinishTeleport(FVector destination);
+
 
 	UPROPERTY(EditAnywhere)
 	float TeleportProjectileSpeed = 800;
@@ -66,8 +76,14 @@ private:
 	float TeleportFadeTime = 0.5;
 	UPROPERTY(EditAnywhere)
 	FVector TeleportProjectionExtent = FVector(100, 100, 100);
+
 	UPROPERTY(EditAnywhere)
 	class UMaterialInterface* BlinkerMaterialBase;
 	UPROPERTY(EditAnywhere)
 	class UCurveFloat* RadiusVsVelocity;
+
+	UPROPERTY(EditAnywhere)
+	class UStaticMesh* TeleportArchMesh;
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* TeleportArchMaterial;
 };

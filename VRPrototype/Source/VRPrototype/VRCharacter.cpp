@@ -11,6 +11,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "MotionControllerComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SplineComponent.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -32,6 +33,8 @@ AVRCharacter::AVRCharacter()
 	RightController->SetupAttachment(VRRoot);
 	RightController->SetTrackingMotionSource(FName("Right"));
 
+	TeleportPath = CreateDefaultSubobject<USplineComponent>(TEXT("TeleportPath"));
+	TeleportPath->SetupAttachment(RightController);
 
 	DestinationMarker = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DestinationMarker"));
 	Camera->SetupAttachment(GetRootComponent());
@@ -83,11 +86,10 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("Teleport"), IE_Released, this, &AVRCharacter::BeginTeleport);
 }
 
-bool AVRCharacter::FindTeleportDestination(FVector& OutLocation)
+bool AVRCharacter::FindTeleportDestination(TArray<FVector>& OutPath, FVector& OutLocation)
 {
 	FVector Start = RightController->GetComponentLocation();
 	FVector Look = RightController->GetForwardVector();
-	//Look = Look.RotateAngleAxis(35, RightController->GetRightVector());
 
 	FPredictProjectilePathParams PathParams(
 		TeleportProjectileRadius,
@@ -99,12 +101,15 @@ bool AVRCharacter::FindTeleportDestination(FVector& OutLocation)
 	);
 	PathParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
 	PathParams.bTraceComplex = true;
+
 	FPredictProjectilePathResult PathResult;
 	UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
 
 	bool bHit = UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
 
 	if (!bHit) return false;
+
+	for (FPredictProjectilePathPointData PointData : PathResult.PathData) { OutPath.Add(PointData.Location); }
 
 	FNavLocation NavLocation;
 	bool bOnNavMesh = UNavigationSystemV1::GetCurrent(GetWorld())->ProjectPointToNavigation(PathResult.HitResult.Location, NavLocation, TeleportProjectionExtent);
@@ -118,11 +123,13 @@ bool AVRCharacter::FindTeleportDestination(FVector& OutLocation)
 
 void AVRCharacter::UpdateDestinationMarker()
 {
+	TArray<FVector> Path;
 	FVector Location;
-	bool bHasDestination = FindTeleportDestination(Location);
+	bool bHasDestination = FindTeleportDestination(Path, Location);
 
 	DestinationMarker->SetVisibility(bHasDestination);
 	DestinationMarker->SetWorldLocation(Location);
+	DrawTeleportPath(Path);
 }
 
 void AVRCharacter::UpdateBlinkers()
@@ -133,6 +140,41 @@ void AVRCharacter::UpdateBlinkers()
 
 	FVector2D Centre = GetBlinkerCentre();
 	BlinkerMaterialInstance->SetVectorParameterValue(TEXT("Centre"), FLinearColor(Centre.X, Centre.Y, 0));
+}
+
+void AVRCharacter::DrawTeleportPath(const TArray<FVector>& Path)
+{
+	UpdateSpline(Path);
+
+	for (int32 i = 0; i < Path.Num(); i++)
+	{
+		if (TeleportPathMeshPool.Num() <= i)
+		{
+			UStaticMeshComponent* DynamicMesh = NewObject<UStaticMeshComponent>(this);
+			DynamicMesh->AttachToComponent(VRRoot, FAttachmentTransformRules::KeepRelativeTransform);
+			DynamicMesh->SetStaticMesh(TeleportArchMesh);
+			DynamicMesh->SetMaterial(0, TeleportArchMaterial);
+			DynamicMesh->RegisterComponent();
+
+			TeleportPathMeshPool.Add(DynamicMesh);
+		}
+
+		UStaticMeshComponent* DynamicMesh = TeleportPathMeshPool[i];
+		DynamicMesh->SetWorldLocation(Path[i]);
+	}
+}
+
+void AVRCharacter::UpdateSpline(const TArray<FVector>& Path)
+{
+	TeleportPath->ClearSplinePoints(false);
+	for (int32 i = 0; i < Path.Num(); i++)
+	{
+		FVector LocalPosition = TeleportPath->GetComponentTransform().InverseTransformPosition(Path[i]);
+		FSplinePoint SplinePoint(i, LocalPosition, ESplinePointType::Curve);
+		TeleportPath->AddPoint(SplinePoint, false);
+	}
+
+	TeleportPath->UpdateSpline();
 }
 
 FVector2D AVRCharacter::GetBlinkerCentre()
