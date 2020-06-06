@@ -46,7 +46,7 @@ private:
 	UPROPERTY()
 	class UMaterialInstanceDynamic* BlinkerMaterialInstance;
 	UPROPERTY()
-	TArray<class UStaticMeshComponent*> TeleportPathMeshPool;
+	TArray<class USplineMeshComponent*> TeleportPathMeshPool;
 
 
 	bool FindTeleportDestination(TArray<FVector> &OutPath, FVector& OutLocation);
