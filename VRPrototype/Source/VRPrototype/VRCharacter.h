@@ -33,9 +33,9 @@ private:
 	class USceneComponent* VRRoot;
 
 	UPROPERTY()
-	class UMotionControllerComponent* LeftController;
+	class AHandController* LeftController;
 	UPROPERTY()
-	class UMotionControllerComponent* RightController;
+	class AHandController* RightController;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* TeleportPath;
@@ -65,7 +65,7 @@ private:
 	void BeginTeleport();
 	void FinishTeleport(FVector destination);
 
-
+	// Configuration Parameters
 	UPROPERTY(EditAnywhere)
 	float TeleportProjectileSpeed = 800;
 	UPROPERTY(EditAnywhere)
@@ -82,8 +82,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UCurveFloat* RadiusVsVelocity;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class UStaticMesh* TeleportArchMesh;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class UMaterialInterface* TeleportArchMaterial;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AHandController> HandControllerClass;
 };
