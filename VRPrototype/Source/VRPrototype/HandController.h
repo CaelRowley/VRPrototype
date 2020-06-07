@@ -42,4 +42,7 @@ private:
 	// State
 	bool bCanClimb = false;
 
+	// Configuration Parameters
+	UPROPERTY(EditAnywhere)
+	class UHapticFeedbackEffect_Base* HapticEffect;
 };
