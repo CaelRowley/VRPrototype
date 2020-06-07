@@ -61,6 +61,8 @@ void AVRCharacter::BeginPlay()
 		RightController->SetMotionSource(FName("Right"));
 		RightController->SetOwner(this);
 	}
+
+	LeftController->PairControllers(RightController);
 }
 
 // Called every frame

@@ -5,15 +5,23 @@
 
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AHandController::AHandController()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionController"));
 	SetRootComponent(MotionController);
+}
+
+void AHandController::PairControllers(AHandController* Controller)
+{
+	OtherController = Controller;
+	OtherController->OtherController = this;
 }
 
 void AHandController::Grip()
@@ -24,12 +32,29 @@ void AHandController::Grip()
 	{
 		bIsClimbing = true;
 		ClimbingStartLocation = GetActorLocation();
+
+		OtherController->bIsClimbing = false;
+
+		ACharacter* Character = Cast<ACharacter>(GetAttachParentActor());
+		if (Character != nullptr)
+		{
+			Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+		}
 	}
 }
 
 void AHandController::Release()
 {
-	bIsClimbing = false;
+	if (bIsClimbing)
+	{
+		bIsClimbing = false;
+
+		ACharacter* Character = Cast<ACharacter>(GetAttachParentActor());
+		if (Character != nullptr)
+		{
+			Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
+		}
+	}
 }
 
 // Called when the game starts or when spawned

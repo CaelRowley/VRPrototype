@@ -17,6 +17,7 @@ public:
 	AHandController();
 
 	inline void SetMotionSource(FName MotionSource) { MotionController->SetTrackingMotionSource(MotionSource); }
+	void PairControllers(AHandController* Controller);
 	void Grip();
 	void Release();
 
@@ -46,6 +47,7 @@ private:
 	bool bCanClimb = false;
 	bool bIsClimbing = false;
 	FVector ClimbingStartLocation;
+	AHandController* OtherController;
 
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)
