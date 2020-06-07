@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MotionControllerComponent.h"
 #include "HandController.generated.h"
 
 UCLASS()
@@ -15,7 +16,9 @@ public:
 	// Sets default values for this actor's properties
 	AHandController();
 
-	void SetMotionSource(FName MotionSource);
+	inline void SetMotionSource(FName MotionSource) { MotionController->SetTrackingMotionSource(MotionSource); }
+	void Grip();
+	void Release();
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,6 +44,8 @@ private:
 
 	// State
 	bool bCanClimb = false;
+	bool bIsClimbing = false;
+	FVector ClimbingStartLocation;
 
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)

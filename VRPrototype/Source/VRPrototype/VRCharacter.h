@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "HandController.h"
 #include "VRCharacter.generated.h"
 
 UCLASS()
@@ -33,9 +34,9 @@ private:
 	class USceneComponent* VRRoot;
 
 	UPROPERTY()
-	class AHandController* LeftController;
+	AHandController* LeftController;
 	UPROPERTY()
-	class AHandController* RightController;
+	AHandController* RightController;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* TeleportPath;
@@ -61,6 +62,11 @@ private:
 	void MoveBack(float throttle);
 	void MoveLeft(float throttle);
 	void MoveRight(float throttle);
+
+	inline void GripLeft() { LeftController->Grip(); }
+	void ReleaseLeft() { LeftController->Release(); }
+	void GripRight() { RightController->Grip(); }
+	void ReleaseRight() { RightController->Release(); }
 
 	void BeginTeleport();
 	void FinishTeleport(FVector destination);
