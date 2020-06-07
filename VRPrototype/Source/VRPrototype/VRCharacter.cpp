@@ -230,33 +230,21 @@ FVector2D AVRCharacter::GetBlinkerCentre()
 
 void AVRCharacter::MoveForward(float throttle)
 {
-	if (throttle != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("MoveForward: %f"), throttle);
-	}
 	AddMovementInput(throttle * Camera->GetForwardVector());
 }
 
 void AVRCharacter::MoveBack(float throttle)
 {
-	if (throttle != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("MoveBack: %f"), throttle);
-	}
 	AddMovementInput(throttle * Camera->GetForwardVector());
 }
 
 void AVRCharacter::MoveLeft(float throttle)
 {
-	if (throttle != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), throttle);
-	}
 	AddMovementInput(throttle * Camera->GetRightVector());
 }
 
 void AVRCharacter::MoveRight(float throttle)
 {
-	if (throttle != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), throttle);
-	}
 	AddMovementInput(throttle * Camera->GetRightVector());
 }
 

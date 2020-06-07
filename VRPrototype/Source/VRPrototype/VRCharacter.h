@@ -49,7 +49,7 @@ private:
 	UPROPERTY()
 	TArray<class USplineMeshComponent*> TeleportPathMeshPool;
 
-
+	// Helpers
 	bool FindTeleportDestination(TArray<FVector> &OutPath, FVector& OutLocation);
 	void StartFade(float fromAlpha, float toAlpha);
 	void UpdateDestinationMarker();
@@ -57,7 +57,10 @@ private:
 	void DrawTeleportPath(const TArray<FVector>& Path);
 	void UpdateSpline(const TArray<FVector>& Path);
 	FVector2D GetBlinkerCentre();
+	void BeginTeleport();
+	void FinishTeleport(FVector destination);
 
+	// Player controls
 	void MoveForward(float throttle);
 	void MoveBack(float throttle);
 	void MoveLeft(float throttle);
@@ -68,16 +71,13 @@ private:
 	void GripRight() { RightController->Grip(); }
 	void ReleaseRight() { RightController->Release(); }
 
-	void BeginTeleport();
-	void FinishTeleport(FVector destination);
-
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)
-	float TeleportProjectileSpeed = 800;
+	float TeleportProjectileSpeed = 1200;
 	UPROPERTY(EditAnywhere)
 	float TeleportProjectileRadius = 10;
 	UPROPERTY(EditAnywhere)
-	float TeleportSimultionTime = 1;
+	float TeleportSimultionTime = 3;
 	UPROPERTY(EditAnywhere)
 	float TeleportFadeTime = 0.5;
 	UPROPERTY(EditAnywhere)
