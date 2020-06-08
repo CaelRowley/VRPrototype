@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/World.h"
 
 // Sets default values
 AHandController::AHandController()
@@ -55,6 +56,16 @@ void AHandController::Release()
 			Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
 		}
 	}
+}
+
+void AHandController::RightTriggerPressed()
+{
+	AStroke* Stroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
+	Stroke->SetActorLocation(GetActorLocation());
+}
+
+void AHandController::RightTriggerReleased()
+{
 }
 
 // Called when the game starts or when spawned

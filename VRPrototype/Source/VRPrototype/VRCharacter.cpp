@@ -1,17 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "VRCharacter.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "TimerManager.h"
-#include "NavigationSystem.h"
+#include "Components/SplineComponent.h"
+#include "Components/SplineMeshComponent.h"
 #include "Components/PostProcessComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/SplineComponent.h"
-#include "Components/SplineMeshComponent.h"
+#include "TimerManager.h"
+#include "NavigationSystem.h"
+
+
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -70,12 +73,6 @@ void AVRCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// TODO: should set player capsule to headset location but causes constant movement
-	//FVector NewCameraOffset = Camera->GetComponentLocation() - GetActorLocation();
-	//NewCameraOffset.Z = 0;
-	//AddActorWorldOffset(NewCameraOffset);
-	//VRRoot->AddWorldOffset(-NewCameraOffset);
-
 	UpdateDestinationMarker();
 	UpdateBlinkers();
 }
@@ -99,12 +96,17 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("GripLeft"), IE_Released, this, &AVRCharacter::ReleaseLeft);
 	PlayerInputComponent->BindAction(TEXT("GripRight"), IE_Pressed, this, &AVRCharacter::GripRight);
 	PlayerInputComponent->BindAction(TEXT("GripRight"), IE_Released, this, &AVRCharacter::ReleaseRight);
+
+	//PlayerInputComponent->BindAction(TEXT("LeftTrigger"), IE_Pressed, this, &AVRCharacter::LeftTriggerPressed);
+	//PlayerInputComponent->BindAction(TEXT("LeftTrigger"), IE_Released, this, &AVRCharacter::LeftTriggerReleased);
+	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Pressed, this, &AVRCharacter::RightTriggerPressed);
+	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Released, this, &AVRCharacter::RightTriggerReleased);
 }
 
 bool AVRCharacter::FindTeleportDestination(TArray<FVector>& OutPath, FVector& OutLocation)
 {
-	FVector Start = RightController->GetActorLocation();
-	FVector Look = RightController->GetActorForwardVector();
+	FVector Start = LeftController->GetActorLocation();
+	FVector Look = LeftController->GetActorForwardVector();
 
 	FPredictProjectilePathParams PathParams(
 		TeleportProjectileRadius,

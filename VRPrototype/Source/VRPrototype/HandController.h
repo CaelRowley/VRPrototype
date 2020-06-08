@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MotionControllerComponent.h"
+#include "Stroke.h"
 #include "HandController.generated.h"
 
 UCLASS()
@@ -20,6 +21,8 @@ public:
 	void PairControllers(AHandController* Controller);
 	void Grip();
 	void Release();
+	void RightTriggerPressed();
+	void RightTriggerReleased();
 
 protected:
 	// Called when the game starts or when spawned
@@ -39,9 +42,11 @@ private:
 	// Helpers
 	bool CanClimb() const;
 
-	// Default sub object
+	// Default sub objects
 	UPROPERTY(VisibleAnywhere)
 	class UMotionControllerComponent* MotionController;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AStroke> StrokeClass;
 
 	// State
 	bool bCanClimb = false;

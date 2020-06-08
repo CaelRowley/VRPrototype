@@ -70,6 +70,8 @@ private:
 	void ReleaseLeft() { LeftController->Release(); }
 	void GripRight() { RightController->Grip(); }
 	void ReleaseRight() { RightController->Release(); }
+	void RightTriggerPressed() { RightController->RightTriggerPressed(); }
+	void RightTriggerReleased() { RightController->RightTriggerReleased(); }
 
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)
