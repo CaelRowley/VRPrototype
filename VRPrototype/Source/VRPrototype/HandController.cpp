@@ -60,12 +60,13 @@ void AHandController::Release()
 
 void AHandController::RightTriggerPressed()
 {
-	AStroke* Stroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
-	Stroke->SetActorLocation(GetActorLocation());
+	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
+	CurrentStroke->SetActorLocation(GetActorLocation());
 }
 
 void AHandController::RightTriggerReleased()
 {
+	CurrentStroke = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -86,6 +87,11 @@ void AHandController::Tick(float DeltaTime)
 	{
 		FVector HandControllerDelta = GetActorLocation() - ClimbingStartLocation;
 		GetAttachParentActor()->AddActorWorldOffset(-HandControllerDelta);
+	}
+
+	if (CurrentStroke) 
+	{
+		CurrentStroke->Update(GetActorLocation());
 	}
 }
 

@@ -53,6 +53,7 @@ private:
 	bool bIsClimbing = false;
 	FVector ClimbingStartLocation;
 	AHandController* OtherController;
+	AStroke* CurrentStroke;
 
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)

@@ -14,8 +14,6 @@
 #include "TimerManager.h"
 #include "NavigationSystem.h"
 
-
-
 // Sets default values
 AVRCharacter::AVRCharacter()
 {
