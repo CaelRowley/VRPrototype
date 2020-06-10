@@ -67,11 +67,11 @@ private:
 	void MoveRight(float throttle);
 
 	inline void GripLeft() { LeftController->Grip(); }
-	void ReleaseLeft() { LeftController->Release(); }
-	void GripRight() { RightController->Grip(); }
-	void ReleaseRight() { RightController->Release(); }
-	void RightTriggerPressed() { RightController->RightTriggerPressed(); }
-	void RightTriggerReleased() { RightController->RightTriggerReleased(); }
+	inline void ReleaseLeft() { LeftController->Release(); }
+	inline void GripRight() { RightController->Grip(); }
+	inline void ReleaseRight() { RightController->Release(); }
+	inline void RightTriggerPressed() { RightController->RightTriggerPressed(); }
+	inline void RightTriggerReleased() { RightController->RightTriggerReleased(); }
 
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)

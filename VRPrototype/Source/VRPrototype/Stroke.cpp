@@ -13,28 +13,53 @@ AStroke::AStroke()
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
+
+	StrokeMeshes = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("StrokeMeshes"));
+	StrokeMeshes->SetupAttachment(Root);
 }
 
 void AStroke::Update(FVector CursorLocation)
 {
-	USplineMeshComponent* Spline = CreateSplineMesh();
-	
-	FVector StartPos = GetActorTransform().InverseTransformPosition(CursorLocation);
-	FVector EndPos = GetActorTransform().InverseTransformPosition(PreviousCursorLocation);
+	if (PreviousCursorLocation.IsNearlyZero())
+	{
+		PreviousCursorLocation = CursorLocation;
+		return;
+	}
 
-	Spline->SetStartAndEnd(StartPos, FVector::ZeroVector, EndPos, FVector::ZeroVector);
+	StrokeMeshes->AddInstance(GetNextSegmentTransform(CursorLocation));
 
 	PreviousCursorLocation = CursorLocation;
 }
 
-USplineMeshComponent* AStroke::CreateSplineMesh()
+FTransform AStroke::GetNextSegmentTransform(FVector CurrentCursorLocation) const
 {
-	USplineMeshComponent* NewSpline = NewObject<USplineMeshComponent>(this);
-	NewSpline->SetMobility(EComponentMobility::Movable);
-	NewSpline->AttachToComponent(Root, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	NewSpline->SetStaticMesh(SplineMesh);
-	NewSpline->SetMaterial(0, SplineMaterial);
-	NewSpline->RegisterComponent();
+	FTransform SegmentTransform;
 
-	return NewSpline;
+	SegmentTransform.SetScale3D(GetNextSegmentScale(CurrentCursorLocation));
+	SegmentTransform.SetRotation(GetNextSegmentRotation(CurrentCursorLocation));
+	SegmentTransform.SetLocation(GetNextSegmentLocation(CurrentCursorLocation));
+
+	return SegmentTransform;
 }
+
+FVector AStroke::GetNextSegmentScale(FVector CurrentCursorLocation) const
+{
+	FVector Segment = CurrentCursorLocation - PreviousCursorLocation;
+	return FVector(Segment.Size(), 1, 1);
+}
+
+FQuat AStroke::GetNextSegmentRotation(FVector CurrentCursorLocation) const
+{
+	FVector Segment = CurrentCursorLocation - PreviousCursorLocation;
+	FVector SegmentNormal = Segment.GetSafeNormal();
+	return FQuat::FindBetweenNormals(FVector::ForwardVector, SegmentNormal);
+}
+
+FVector AStroke::GetNextSegmentLocation(FVector CurrentCursorLocation) const
+{
+	return GetTransform().InverseTransformPosition(PreviousCursorLocation);
+}
+
+
+
+
