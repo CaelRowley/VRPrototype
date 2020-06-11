@@ -15,7 +15,9 @@ AStroke::AStroke()
 	SetRootComponent(Root);
 
 	StrokeMeshes = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("StrokeMeshes"));
-	StrokeMeshes->SetupAttachment(Root);
+	StrokeMeshes->SetupAttachment(Root);	
+	JointMeshes = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("JointMeshes"));
+	JointMeshes->SetupAttachment(Root);
 }
 
 void AStroke::Update(FVector CursorLocation)
@@ -23,10 +25,12 @@ void AStroke::Update(FVector CursorLocation)
 	if (PreviousCursorLocation.IsNearlyZero())
 	{
 		PreviousCursorLocation = CursorLocation;
+		JointMeshes->AddInstance(GetNextJointTransform(CursorLocation));
 		return;
 	}
 
 	StrokeMeshes->AddInstance(GetNextSegmentTransform(CursorLocation));
+	JointMeshes->AddInstance(GetNextJointTransform(CursorLocation));
 
 	PreviousCursorLocation = CursorLocation;
 }
@@ -40,6 +44,13 @@ FTransform AStroke::GetNextSegmentTransform(FVector CurrentCursorLocation) const
 	SegmentTransform.SetLocation(GetNextSegmentLocation(CurrentCursorLocation));
 
 	return SegmentTransform;
+}
+
+FTransform AStroke::GetNextJointTransform(FVector CurrentCursorLocation) const
+{
+	FTransform JointTransform;
+	JointTransform.SetLocation(GetTransform().InverseTransformPosition(CurrentCursorLocation));
+;	return JointTransform;
 }
 
 FVector AStroke::GetNextSegmentScale(FVector CurrentCursorLocation) const
