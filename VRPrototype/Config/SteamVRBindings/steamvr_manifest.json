@@ -96,22 +96,6 @@
 		{
 			"name": "/actions/main/in/RightTrigger",
 			"type": "boolean"
-		},
-		{
-			"name": "/actions/main/in/MoveForward axis",
-			"type": "vector1"
-		},
-		{
-			"name": "/actions/main/in/MoveBack axis",
-			"type": "vector1"
-		},
-		{
-			"name": "/actions/main/in/MoveLeft axis",
-			"type": "vector1"
-		},
-		{
-			"name": "/actions/main/in/MoveRight axis",
-			"type": "vector1"
 		}
 	],
 	"action_sets": [
@@ -233,10 +217,6 @@
 			"/actions/main/in/GripRight": "GripRight",
 			"/actions/main/in/LeftTrigger": "LeftTrigger",
 			"/actions/main/in/RightTrigger": "RightTrigger",
-			"/actions/main/in/MoveForward axis": "MoveForward",
-			"/actions/main/in/MoveBack axis": "MoveBack",
-			"/actions/main/in/MoveLeft axis": "MoveLeft",
-			"/actions/main/in/MoveRight axis": "MoveRight",
 			"/actions/main": "Main Game Actions"
 		}
 	]
