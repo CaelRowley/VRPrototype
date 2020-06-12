@@ -6,9 +6,6 @@
 #include "GameFramework/SaveGame.h"
 #include "PainterSaveGame.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class VRPROTOTYPE_API UPainterSaveGame : public USaveGame
 {
@@ -16,5 +13,13 @@ class VRPROTOTYPE_API UPainterSaveGame : public USaveGame
 
 public:
 	static UPainterSaveGame* Create();
+	static UPainterSaveGame* Load();
 	bool Save();
+	inline void SetState(FString NewState) { State = NewState; }
+	inline FString GetState() const { return State; }
+
+private:
+	// State
+	UPROPERTY()
+	FString State;
 };

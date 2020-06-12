@@ -65,11 +65,7 @@ void AVRCharacter::BeginPlay()
 		RightController->SetOwner(this);
 	}
 
-	LeftController->PairControllers(RightController);
-
-	UPainterSaveGame* SaveGame = UPainterSaveGame::Create();
-	SaveGame->Save();
-	
+	LeftController->PairControllers(RightController);	
 }
 
 // Called every frame
@@ -105,6 +101,9 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	//PlayerInputComponent->BindAction(TEXT("LeftTrigger"), IE_Released, this, &AVRCharacter::LeftTriggerReleased);
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Pressed, this, &AVRCharacter::RightTriggerPressed);
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Released, this, &AVRCharacter::RightTriggerReleased);
+
+	PlayerInputComponent->BindAction(TEXT("Save"), IE_Released, this, &AVRCharacter::Save);
+	PlayerInputComponent->BindAction(TEXT("Load"), IE_Released, this, &AVRCharacter::Load);
 }
 
 bool AVRCharacter::FindTeleportDestination(TArray<FVector>& OutPath, FVector& OutLocation)
@@ -252,6 +251,26 @@ void AVRCharacter::MoveLeft(float throttle)
 void AVRCharacter::MoveRight(float throttle)
 {
 	AddMovementInput(throttle * Camera->GetRightVector());
+}
+
+void AVRCharacter::Save()
+{
+	UPainterSaveGame* SaveGame = UPainterSaveGame::Create();
+	SaveGame->SetState("Some Save Text");
+	SaveGame->Save();
+}
+
+void AVRCharacter::Load()
+{
+	UPainterSaveGame* SaveGame = UPainterSaveGame::Load();
+	if (SaveGame)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Painting State %s"), *SaveGame->GetState());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Save not found"));
+	}
 }
 
 

@@ -73,6 +73,9 @@ private:
 	inline void RightTriggerPressed() { RightController->RightTriggerPressed(); }
 	inline void RightTriggerReleased() { RightController->RightTriggerReleased(); }
 
+	void Save();
+	void Load();
+
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)
 	float TeleportProjectileSpeed = 1200;
