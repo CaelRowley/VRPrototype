@@ -2,6 +2,8 @@
 
 #include "VRCharacter.h"
 
+#include "Saves/PainterSaveGame.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -64,6 +66,10 @@ void AVRCharacter::BeginPlay()
 	}
 
 	LeftController->PairControllers(RightController);
+
+	UPainterSaveGame* SaveGame = UPainterSaveGame::Create();
+	SaveGame->Save();
+	
 }
 
 // Called every frame
