@@ -6,6 +6,17 @@
 #include "GameFramework/SaveGame.h"
 #include "PainterSaveGame.generated.h"
 
+USTRUCT()
+struct FStrokeState
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	TSubclassOf<class AStroke> Class;
+	UPROPERTY()
+	TArray<FVector> ControlPoints;
+};
+
 UCLASS()
 class VRPROTOTYPE_API UPainterSaveGame : public USaveGame
 {
@@ -28,7 +39,7 @@ private:
 	FString State;
 
 	UPROPERTY()
-	TArray<TSubclassOf<class AStroke>> Strokes;
+	TArray<FStrokeState> Strokes;
 
 	void ClearWorld(UWorld* World);
 };

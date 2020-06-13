@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Components/InstancedStaticMeshComponent.h"
+#include "Saves/PainterSaveGame.h"
 
 #include "Stroke.generated.h"
 
@@ -18,6 +20,9 @@ public:
 
 	void Update(FVector CursorLocation);
 	AStroke* CurrentStroke;
+
+	FStrokeState SerializeToStruct() const;
+	static AStroke* DeserializeFromStruct(UWorld* World, const FStrokeState& StrokeState);
 
 private:
 	FTransform GetNextSegmentTransform(FVector CurrentCursorLocation) const;
@@ -37,4 +42,5 @@ private:
 
 	// State
 	FVector PreviousCursorLocation;
+	TArray<FVector> ControlPoints;
 };
