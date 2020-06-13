@@ -257,6 +257,7 @@ void AVRCharacter::Save()
 {
 	UPainterSaveGame* SaveGame = UPainterSaveGame::Create();
 	SaveGame->SetState("Some Save Text");
+	SaveGame->SerializeFromWorld(GetWorld());
 	SaveGame->Save();
 }
 
@@ -266,6 +267,7 @@ void AVRCharacter::Load()
 	if (SaveGame)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Painting State %s"), *SaveGame->GetState());
+		SaveGame->DeserializeToWorld(GetWorld());
 	}
 	else
 	{

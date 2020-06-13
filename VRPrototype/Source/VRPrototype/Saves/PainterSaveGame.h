@@ -15,11 +15,20 @@ public:
 	static UPainterSaveGame* Create();
 	static UPainterSaveGame* Load();
 	bool Save();
+
 	inline void SetState(FString NewState) { State = NewState; }
 	inline FString GetState() const { return State; }
+
+	void SerializeFromWorld(UWorld* World);
+	void DeserializeToWorld(UWorld* World);
 
 private:
 	// State
 	UPROPERTY()
 	FString State;
+
+	UPROPERTY()
+	TArray<TSubclassOf<class AStroke>> Strokes;
+
+	void ClearWorld(UWorld* World);
 };
