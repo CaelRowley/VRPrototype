@@ -49,7 +49,7 @@ void AVRCharacter::BeginPlay()
 	BlinkerMaterialInstance = UMaterialInstanceDynamic::Create(BlinkerMaterialBase, this);
 	PostProcessComponent->AddOrUpdateBlendable(BlinkerMaterialInstance);
 
-	LeftController = GetWorld()->SpawnActor<AHandController>(HandControllerClass);
+	LeftController = GetWorld()->SpawnActor<AHandControllerBase>(HandControllerClass);
 	if (LeftController != nullptr)
 	{
 		LeftController->AttachToComponent(VRRoot, FAttachmentTransformRules::KeepRelativeTransform);
@@ -57,7 +57,7 @@ void AVRCharacter::BeginPlay()
 		LeftController->SetOwner(this);
 	}
 
-	RightController = GetWorld()->SpawnActor<AHandController>(HandControllerClass);
+	RightController = GetWorld()->SpawnActor<AHandControllerBase>(HandControllerClass);
 	if (RightController != nullptr)
 	{
 		RightController->AttachToComponent(VRRoot, FAttachmentTransformRules::KeepRelativeTransform);

@@ -96,6 +96,14 @@
 		{
 			"name": "/actions/main/in/RightTrigger",
 			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/Save",
+			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/Load",
+			"type": "boolean"
 		}
 	],
 	"action_sets": [
@@ -217,6 +225,8 @@
 			"/actions/main/in/GripRight": "GripRight",
 			"/actions/main/in/LeftTrigger": "LeftTrigger",
 			"/actions/main/in/RightTrigger": "RightTrigger",
+			"/actions/main/in/Save": "Save",
+			"/actions/main/in/Load": "Load",
 			"/actions/main": "Main Game Actions"
 		}
 	]

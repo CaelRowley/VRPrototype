@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HandController.h"
+#include "PaintBrushHandController.h"
 
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
@@ -10,22 +10,19 @@
 #include "Engine/World.h"
 
 // Sets default values
-AHandController::AHandController()
+APaintBrushHandController::APaintBrushHandController()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionController"));
-	SetRootComponent(MotionController);
 }
 
-void AHandController::PairControllers(AHandController* Controller)
+void APaintBrushHandController::PairControllers(AHandControllerBase* Controller)
 {
-	OtherController = Controller;
+	OtherController = Cast<APaintBrushHandController>(Controller);
 	OtherController->OtherController = this;
 }
 
-void AHandController::Grip()
+void APaintBrushHandController::Grip()
 {
 	if (!bCanClimb) return;
 
@@ -44,7 +41,7 @@ void AHandController::Grip()
 	}
 }
 
-void AHandController::Release()
+void APaintBrushHandController::Release()
 {
 	if (bIsClimbing)
 	{
@@ -58,35 +55,35 @@ void AHandController::Release()
 	}
 }
 
-void AHandController::RightTriggerPressed()
+void APaintBrushHandController::RightTriggerPressed()
 {
 	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
 	CurrentStroke->SetActorLocation(GetActorLocation());
 }
 
-void AHandController::RightTriggerReleased()
+void APaintBrushHandController::RightTriggerReleased()
 {
 	CurrentStroke = nullptr;
 }
 
 // Called when the game starts or when spawned
-void AHandController::BeginPlay()
+void APaintBrushHandController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorBeginOverlap.AddDynamic(this, &AHandController::ActorBeginOverlap);
-	OnActorEndOverlap.AddDynamic(this, &AHandController::ActorEndOverlap);
+	OnActorBeginOverlap.AddDynamic(this, &APaintBrushHandController::ActorBeginOverlap);
+	OnActorEndOverlap.AddDynamic(this, &APaintBrushHandController::ActorEndOverlap);
 }
 
 // Called every frame
-void AHandController::Tick(float DeltaTime)
+void APaintBrushHandController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	if (bIsClimbing)
 	{
-		FVector HandControllerDelta = GetActorLocation() - ClimbingStartLocation;
-		GetAttachParentActor()->AddActorWorldOffset(-HandControllerDelta);
+		FVector PaintBrushHandControllerDelta = GetActorLocation() - ClimbingStartLocation;
+		GetAttachParentActor()->AddActorWorldOffset(-PaintBrushHandControllerDelta);
 	}
 
 	if (CurrentStroke) 
@@ -95,7 +92,7 @@ void AHandController::Tick(float DeltaTime)
 	}
 }
 
-void AHandController::ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void APaintBrushHandController::ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	bool bNewCanClimb = CanClimb();
 	if (!bCanClimb && bNewCanClimb)
@@ -114,12 +111,12 @@ void AHandController::ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherAc
 	bCanClimb = bNewCanClimb;
 }
 
-void AHandController::ActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void APaintBrushHandController::ActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	bCanClimb = CanClimb();
 }
 
-bool AHandController::CanClimb() const
+bool APaintBrushHandController::CanClimb() const
 {
 	TArray<AActor*> OverlappingActors;
 	GetOverlappingActors(OverlappingActors);

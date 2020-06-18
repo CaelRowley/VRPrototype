@@ -4,25 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MotionControllerComponent.h"
 #include "Stroke.h"
-#include "HandController.generated.h"
+#include "HandControllerBase.h"
+
+#include "PaintBrushHandController.generated.h"
 
 UCLASS()
-class VRPROTOTYPE_API AHandController : public AActor
+class VRPROTOTYPE_API APaintBrushHandController : public AHandControllerBase
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AHandController();
+	APaintBrushHandController();
 
-	inline void SetMotionSource(FName MotionSource) { MotionController->SetTrackingMotionSource(MotionSource); }
-	void PairControllers(AHandController* Controller);
-	void Grip();
-	void Release();
-	void RightTriggerPressed();
-	void RightTriggerReleased();
+	void PairControllers(AHandControllerBase* Controller) override;
+	void Grip() override;
+	void Release() override;
+	void RightTriggerPressed() override;
+	void RightTriggerReleased() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,8 +43,7 @@ private:
 	bool CanClimb() const;
 
 	// Default sub objects
-	UPROPERTY(VisibleAnywhere)
-	class UMotionControllerComponent* MotionController;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AStroke> StrokeClass;
 
@@ -52,7 +51,7 @@ private:
 	bool bCanClimb = false;
 	bool bIsClimbing = false;
 	FVector ClimbingStartLocation;
-	AHandController* OtherController;
+	APaintBrushHandController* OtherController;
 	AStroke* CurrentStroke;
 
 	// Configuration Parameters
