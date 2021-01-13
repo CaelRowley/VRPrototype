@@ -3,34 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "HandControllerBase.h"
-#include "Components/WidgetInteractionComponent.h"
 
-#include "UIPointerController.generated.h"
+#include "HandController.generated.h"
 
-/**
- *
- */
 UCLASS()
-class VRPROTOTYPE_API AUIPointerController : public AHandControllerBase
+class VRPROTOTYPE_API AHandController : public AActor
 {
 	GENERATED_BODY()
-
-public:
-	AUIPointerController();
-
-	void RightTriggerPressed() override;
-	void RightTriggerReleased() override;
+	
+public:	
+	// Sets default values for this actor's properties
+	AHandController();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Components
 	UPROPERTY(VisibleAnywhere)
-	UWidgetInteractionComponent* Pointer;
+		UMotionControllerComponent* MotionController;
 };
