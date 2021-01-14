@@ -17,6 +17,8 @@ public:
 	// Sets default values for this pawn's properties
 	AVRPawn();
 
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,4 +40,7 @@ private:
 	AHandControllerBase* LeftController;
 	UPROPERTY()
 	AHandControllerBase* RightController;
+
+	inline void RightTriggerPressed() { RightController->RightTriggerPressed(); }
+	inline void RightTriggerReleased() { RightController->RightTriggerReleased(); }
 };

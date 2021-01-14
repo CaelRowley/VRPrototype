@@ -19,6 +19,7 @@ class VRPROTOTYPE_API AUIPointerController : public AHandControllerBase
 public:
 	AUIPointerController();
 
+	void PairControllers(AHandControllerBase* Controller) override;
 	void RightTriggerPressed() override;
 	void RightTriggerReleased() override;
 
@@ -31,6 +32,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	//UPROPERTY()
+	//class MotionController* Root;
+
+	AUIPointerController* OtherController;
+
 	UPROPERTY(VisibleAnywhere)
 	UWidgetInteractionComponent* Pointer;
 };
