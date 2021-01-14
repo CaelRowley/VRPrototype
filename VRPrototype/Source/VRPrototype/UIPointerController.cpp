@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "InputCoreTypes.h"
-
 #include "UIPointerController.h"
+
+#include "InputCoreTypes.h"
 
 AUIPointerController::AUIPointerController() 
 {
