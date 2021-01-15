@@ -24,7 +24,7 @@ class VRPROTOTYPE_API UPainterSaveGame : public USaveGame
 
 public:
 	static UPainterSaveGame* Create();
-	static UPainterSaveGame* Load();
+	static UPainterSaveGame* Load(FString SlotNames);
 	bool Save();
 
 	inline void SetState(FString NewState) { State = NewState; }
@@ -33,10 +33,15 @@ public:
 	void SerializeFromWorld(UWorld* World);
 	void DeserializeToWorld(UWorld* World);
 
+	FString GetSlotNames() const { return SlotNames; }
+
 private:
 	// State
 	UPROPERTY()
 	FString State;
+
+	UPROPERTY()
+	FString SlotNames;
 
 	UPROPERTY()
 	TArray<FStrokeState> Strokes;

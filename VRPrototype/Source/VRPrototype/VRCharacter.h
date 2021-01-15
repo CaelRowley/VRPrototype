@@ -100,4 +100,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AHandControllerBase> HandControllerClass;
+
+	FString CurrentSlotName;
 };

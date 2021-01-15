@@ -43,6 +43,12 @@ void AVRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UPainterSaveGame* Painting = UPainterSaveGame::Create();
+	if (Painting && Painting->Save())
+	{
+		CurrentSlotName = Painting->GetSlotNames();
+	}
+
 	bUseControllerRotationPitch = true;
 	DestinationMarker->SetVisibility(false);
 
@@ -255,15 +261,18 @@ void AVRCharacter::MoveRight(float throttle)
 
 void AVRCharacter::Save()
 {
-	UPainterSaveGame* SaveGame = UPainterSaveGame::Create();
-	SaveGame->SetState("Some Save Text");
-	SaveGame->SerializeFromWorld(GetWorld());
-	SaveGame->Save();
+	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
+	if (Painting)
+	{
+		Painting->SetState("Painting saved!");
+		Painting->SerializeFromWorld(GetWorld());
+		Painting->Save();
+	}
 }
 
 void AVRCharacter::Load()
 {
-	UPainterSaveGame* SaveGame = UPainterSaveGame::Load();
+	UPainterSaveGame* SaveGame = UPainterSaveGame::Load(CurrentSlotName);
 	if (SaveGame)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Painting State %s"), *SaveGame->GetState());
