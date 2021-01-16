@@ -5,16 +5,17 @@
 
 #include "Components/SizeBox.h"
 
-void UPaintingGrid::AddPainting()
+void UPaintingGrid::AddPainting(int32 PaintingIndex, FString PaintingName)
 {
 	if (!PaintingGrid) return;
 
 	UE_LOG(LogTemp, Warning, TEXT("Grid Name: %s"), *PaintingGrid->GetName());
-	UUserWidget* NewWidget = CreateWidget<UUserWidget>(GetWorld(), GridCardClass);
+	UPaintingGridCard* NewWidget = CreateWidget<UPaintingGridCard>(GetWorld(), GridCardClass);
 
 	if (!NewWidget) return;
 
-	USizeBox* CardContainer = Cast<USizeBox>(PaintingGrid->GetChildAt(0));
+	NewWidget->SetPaitningName(PaintingName);
+	USizeBox* CardContainer = Cast<USizeBox>(PaintingGrid->GetChildAt(PaintingIndex));
 
 	if (!CardContainer) return;
 

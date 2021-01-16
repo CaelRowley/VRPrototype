@@ -11,6 +11,8 @@
 
 UPainterSaveGame* UPainterSaveGame::Create()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Painting Creating..."));
+
 	UPainterSaveGame* NewSaveGame = Cast<UPainterSaveGame>(UGameplayStatics::CreateSaveGameObject(StaticClass()));
 	NewSaveGame->SlotNames = FGuid::NewGuid().ToString();
 	if(!NewSaveGame->Save()) return nullptr;

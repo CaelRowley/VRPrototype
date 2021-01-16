@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 
 #include "Components/UniformGridPanel.h"
+#include "PaintingGridCard.h"
 
 #include "PaintingGrid.generated.h"
 
@@ -19,7 +20,7 @@ class VRPROTOTYPE_API UPaintingGrid : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void AddPainting();
+	void AddPainting(int32 PaintingIndex, FString PaintingName);
 	
 protected:
 	UPROPERTY(BlueprintReadonly, VisibleAnywhere, meta = (BindWidget))
@@ -27,5 +28,5 @@ protected:
 
 private:
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> GridCardClass;
+	TSubclassOf<UPaintingGridCard> GridCardClass;
 };

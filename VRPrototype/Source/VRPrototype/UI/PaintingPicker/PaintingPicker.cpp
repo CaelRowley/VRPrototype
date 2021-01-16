@@ -3,6 +3,8 @@
 
 #include "PaintingPicker.h"
 
+#include "../../Saves/PainterSaveGameIndex.h"
+
 #include "PaintingGrid.h"
 
 // Sets default values
@@ -29,6 +31,13 @@ void APaintingPicker::BeginPlay()
 	UPaintingGrid* PaintingGridWidget = Cast<UPaintingGrid>(PaintingGrid->GetUserWidgetObject());
 	if (!PaintingGridWidget) return;
 
-	PaintingGridWidget->AddPainting();
+	int32 Index = 0;
+
+	for (FString SlotName : UPainterSaveGameIndex::Load()->GetSlotNames())
+	{
+		PaintingGridWidget->AddPainting(Index, SlotName);
+		Index++;
+		UE_LOG(LogTemp, Warning, TEXT("Painting name: %s"), *SlotName);
+	}
 }
 
