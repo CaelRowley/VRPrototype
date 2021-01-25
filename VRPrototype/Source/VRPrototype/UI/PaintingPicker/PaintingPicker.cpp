@@ -36,7 +36,7 @@ void APaintingPicker::BeginPlay()
 	for (FString SlotName : UPainterSaveGameIndex::Load()->GetSlotNames())
 	{
 		PaintingGridWidget->AddPainting(Index, SlotName);
-		Index++;
+		++Index;
 		UE_LOG(LogTemp, Warning, TEXT("Painting name: %s"), *SlotName);
 	}
 }
