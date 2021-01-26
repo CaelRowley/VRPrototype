@@ -3,6 +3,7 @@
 #include "VRCharacter.h"
 
 #include "Saves/PainterSaveGame.h"
+#include "VRGameMode.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -261,13 +262,11 @@ void AVRCharacter::MoveRight(float throttle)
 
 void AVRCharacter::Save()
 {
-	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
-	if (Painting)
-	{
-		Painting->SetState("Painting saved!");
-		Painting->SerializeFromWorld(GetWorld());
-		Painting->Save();
-	}
+	auto GameMode = Cast<AVRGameMode>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+	GameMode->Save();
+
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }
 
 void AVRCharacter::Load()

@@ -22,13 +22,27 @@ void AVRGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Load();
+	UStereoLayerFunctionLibrary::HideSplashScreen();
+}
+
+void AVRGameMode::Save()
+{
+	UPainterSaveGame* Painting = UPainterSaveGame::Load(SlotName);
+	if (Painting)
+	{
+		Painting->SerializeFromWorld(GetWorld());
+		Painting->Save();
+	}
+}
+
+void AVRGameMode::Load()
+{
 	UPainterSaveGame* SaveGame = UPainterSaveGame::Load(SlotName);
 	if (SaveGame)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Loading Save: %s"), *SlotName);
 		SaveGame->DeserializeToWorld(GetWorld());
-
-		UStereoLayerFunctionLibrary::HideSplashScreen();
 	}
 	else
 	{
