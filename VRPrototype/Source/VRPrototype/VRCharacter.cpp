@@ -44,12 +44,6 @@ void AVRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UPainterSaveGame* Painting = UPainterSaveGame::Create();
-	if (Painting && Painting->Save())
-	{
-		CurrentSlotName = Painting->GetSlotNames();
-	}
-
 	bUseControllerRotationPitch = true;
 	DestinationMarker->SetVisibility(false);
 
@@ -271,16 +265,9 @@ void AVRCharacter::Save()
 
 void AVRCharacter::Load()
 {
-	UPainterSaveGame* SaveGame = UPainterSaveGame::Load(CurrentSlotName);
-	if (SaveGame)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Painting State %s"), *SaveGame->GetState());
-		SaveGame->DeserializeToWorld(GetWorld());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Save not found"));
-	}
+	auto GameMode = Cast<AVRGameMode>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+	GameMode->Load();
 }
 
 
