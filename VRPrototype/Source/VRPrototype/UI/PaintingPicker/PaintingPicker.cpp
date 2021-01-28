@@ -43,7 +43,7 @@ void APaintingPicker::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UActionBar* ActionBarWidget = Cast<UActionBar>(PaintingGrid->GetUserWidgetObject());
+	UActionBar* ActionBarWidget = Cast<UActionBar>(ActionBar->GetUserWidgetObject());
 	if (ActionBarWidget)
 	{
 		ActionBarWidget->SetParentPicker(this);
