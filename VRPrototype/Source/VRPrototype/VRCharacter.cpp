@@ -256,11 +256,11 @@ void AVRCharacter::MoveRight(float throttle)
 
 void AVRCharacter::Save()
 {
-	auto GameMode = Cast<AVRGameMode>(GetWorld()->GetAuthGameMode());
-	if (!GameMode) return;
-	GameMode->Save();
+	//auto GameMode = Cast<AVRGameMode>(GetWorld()->GetAuthGameMode());
+	//if (!GameMode) return;
+	//GameMode->Save();
 
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
+	// UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }
 
 void AVRCharacter::Menu()

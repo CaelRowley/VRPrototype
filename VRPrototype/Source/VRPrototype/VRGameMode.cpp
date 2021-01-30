@@ -4,7 +4,7 @@
 #include "VRGameMode.h"
 
 #include "Saves/PainterSaveGame.h"
-
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/StereoLayerFunctionLibrary.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -48,4 +48,10 @@ void AVRGameMode::Load()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Save not found: %s"), *SlotName);
 	}
+}
+
+void AVRGameMode::SaveAndQuit()
+{
+	Save();
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }
