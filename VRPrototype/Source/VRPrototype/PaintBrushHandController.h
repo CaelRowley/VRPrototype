@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Stroke.h"
 #include "HandControllerBase.h"
+#include "Components/WidgetComponent.h"
 
 #include "PaintBrushHandController.generated.h"
 
@@ -57,4 +58,7 @@ private:
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)
 	class UHapticFeedbackEffect_Base* HapticEffect;
+
+	UPROPERTY(VisibleAnywhere)
+	UWidgetComponent* PaletteMenu;
 };

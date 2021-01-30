@@ -28,5 +28,5 @@ public:
 private:
 	// Components
 	UPROPERTY(VisibleAnywhere)
-		UMotionControllerComponent* MotionController;
+	UMotionControllerComponent* MotionController;
 };

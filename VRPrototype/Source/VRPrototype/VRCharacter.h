@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "HandControllerBase.h"
+
 #include "VRCharacter.generated.h"
 
 UCLASS()
@@ -74,7 +75,7 @@ private:
 	inline void RightTriggerReleased() { RightController->RightTriggerReleased(); }
 
 	void Save();
-	void Load();
+	void Menu();
 
 	// Configuration Parameters
 	UPROPERTY(EditAnywhere)

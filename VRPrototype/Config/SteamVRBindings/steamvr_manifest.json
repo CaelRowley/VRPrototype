@@ -102,7 +102,7 @@
 			"type": "boolean"
 		},
 		{
-			"name": "/actions/main/in/Load",
+			"name": "/actions/main/in/Menu",
 			"type": "boolean"
 		}
 	],
@@ -226,7 +226,7 @@
 			"/actions/main/in/LeftTrigger": "LeftTrigger",
 			"/actions/main/in/RightTrigger": "RightTrigger",
 			"/actions/main/in/Save": "Save",
-			"/actions/main/in/Load": "Load",
+			"/actions/main/in/Menu": "Menu",
 			"/actions/main": "Main Game Actions"
 		}
 	]

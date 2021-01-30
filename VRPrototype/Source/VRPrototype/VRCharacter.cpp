@@ -104,7 +104,7 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Released, this, &AVRCharacter::RightTriggerReleased);
 
 	PlayerInputComponent->BindAction(TEXT("Save"), IE_Released, this, &AVRCharacter::Save);
-	PlayerInputComponent->BindAction(TEXT("Load"), IE_Released, this, &AVRCharacter::Load);
+	PlayerInputComponent->BindAction(TEXT("Menu"), IE_Released, this, &AVRCharacter::Menu);
 }
 
 bool AVRCharacter::FindTeleportDestination(TArray<FVector>& OutPath, FVector& OutLocation)
@@ -263,11 +263,11 @@ void AVRCharacter::Save()
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }
 
-void AVRCharacter::Load()
+void AVRCharacter::Menu()
 {
-	auto GameMode = Cast<AVRGameMode>(GetWorld()->GetAuthGameMode());
-	if (!GameMode) return;
-	GameMode->Load();
+	//auto GameMode = Cast<AVRGameMode>(GetWorld()->GetAuthGameMode());
+	//if (!GameMode) return;
+	//GameMode->Load();
 }
 
 
