@@ -83,6 +83,36 @@
 							"output": "/actions/main/in/Menu"
 						}
 					}
+				},
+				{
+					"mode": "dpad",
+					"path": "/user/hand/left/input/thumbstick",
+					"parameters":
+					{
+						"sub_mode": "click"
+					},
+					"inputs":
+					{
+						"west":
+						{
+							"output": "/actions/main/in/MoveLeft axis"
+						}
+					}
+				},
+				{
+					"mode": "dpad",
+					"path": "/user/hand/left/input/thumbstick",
+					"parameters":
+					{
+						"sub_mode": "click"
+					},
+					"inputs":
+					{
+						"east":
+						{
+							"output": "/actions/main/in/MoveRight axis"
+						}
+					}
 				}
 			],
 			"poses": [

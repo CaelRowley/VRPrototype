@@ -30,7 +30,7 @@ void APaintingPicker::AddPainting()
 	UE_LOG(LogTemp, Warning, TEXT("Add Button Clicked"));
 	UPainterSaveGame::Create();
 
-	RefreshSlots();
+	Refresh();
 }
 
 void APaintingPicker::ToggleDeleteMode()
@@ -53,27 +53,40 @@ void APaintingPicker::BeginPlay()
 		ActionBarWidget->SetParentPicker(this);
 	}
 
-	RefreshSlots();
+	Refresh();
+}
+
+void APaintingPicker::UpdateCurrentPage(int32 Offset)
+{
+	CurrentPage = FMath::Clamp(CurrentPage + Offset, 0, GetNumberOfPages() - 1);
+
+	Refresh();
 }
 
 void APaintingPicker::RefreshSlots()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Number of pages %d"), GetNumberOfPages());
-
 	if (!GetPaintingGrid()) return;
-
-	GetPaintingGrid()->AddPaginationDot(true);
-	GetPaintingGrid()->AddPaginationDot(false);
-	GetPaintingGrid()->AddPaginationDot(false);
 
 	GetPaintingGrid()->ClearPaintings();
 
-	int32 Index = 0;
-	for (FString SlotName : UPainterSaveGameIndex::Load()->GetSlotNames())
+	int32 StartOffset = CurrentPage * GetPaintingGrid()->GetNumberOfSlots();
+	auto SlotNames = UPainterSaveGameIndex::Load()->GetSlotNames();
+
+	for (int32 i = 0; i < GetPaintingGrid()->GetNumberOfSlots() && StartOffset + i < SlotNames.Num(); ++i)
 	{
-		GetPaintingGrid()->AddPainting(Index, SlotName);
-		++Index;
-		UE_LOG(LogTemp, Warning, TEXT("Painting name: %s"), *SlotName);
+		GetPaintingGrid()->AddPainting(i, SlotNames[StartOffset + i]);
+	}
+}
+
+void APaintingPicker::RefreshDots()
+{
+	if (!GetPaintingGrid()) return;
+
+	GetPaintingGrid()->ClearPaginationDots();
+
+	for (int32 i = 0; i < GetNumberOfPages(); ++i)
+	{
+		GetPaintingGrid()->AddPaginationDot(CurrentPage == i);
 	}
 }
 

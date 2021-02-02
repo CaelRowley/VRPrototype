@@ -3,7 +3,9 @@
 
 #include "VRPawn.h"
 
+#include "EngineUtils.h"
 #include "Engine/World.h"
+#include "UI/PaintingPicker/PaintingPicker.h"
 
 // Sets default values
 AVRPawn::AVRPawn()
@@ -57,4 +59,29 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Pressed, this, &AVRPawn::RightTriggerPressed);
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), IE_Released, this, &AVRPawn::RightTriggerReleased);
+
+	PlayerInputComponent->BindAxis(TEXT("MoveLeft"), this, &AVRPawn::MoveRightAxisInput);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AVRPawn::MoveRightAxisInput);
+}
+
+void AVRPawn::MoveRightAxisInput(float AxisValue)
+{
+	int32 PaginationOffset = 0;
+	PaginationOffset += AxisValue > PaginationThumbstickThreshold ? 1 : 0;
+	PaginationOffset += AxisValue < -PaginationThumbstickThreshold ? -1 : 0;
+
+	if (PaginationOffset != LastPaginationOffset && PaginationOffset != 0)
+	{
+		UpdateCurrentPage(PaginationOffset);
+	}
+
+	LastPaginationOffset = PaginationOffset;
+}
+
+void AVRPawn::UpdateCurrentPage(int32 Offset)
+{
+	for (TActorIterator<APaintingPicker> PaintingPickerItr(GetWorld()); PaintingPickerItr; ++PaintingPickerItr)
+	{
+		PaintingPickerItr->UpdateCurrentPage(Offset);
+	}
 }

@@ -10,7 +10,6 @@ void UPaintingGrid::AddPainting(int32 PaintingIndex, FString PaintingName)
 {
 	if (!PaintingGrid) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("Grid Name: %s"), *PaintingGrid->GetName());
 	UPaintingGridCard* NewWidget = CreateWidget<UPaintingGridCard>(GetWorld(), GridCardClass);
 
 	if (!NewWidget) return;
@@ -45,6 +44,13 @@ void UPaintingGrid::ClearPaintings()
 
 		CardContainer->ClearChildren();
 	}
+}
+
+void UPaintingGrid::ClearPaginationDots()
+{
+	if (!PaginationDots) return;
+
+	PaginationDots->ClearChildren();
 }
 
 int32 UPaintingGrid::GetNumberOfSlots() const

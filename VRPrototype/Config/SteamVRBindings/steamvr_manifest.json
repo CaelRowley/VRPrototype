@@ -104,6 +104,14 @@
 		{
 			"name": "/actions/main/in/Menu",
 			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/MoveLeft axis",
+			"type": "vector1"
+		},
+		{
+			"name": "/actions/main/in/MoveRight axis",
+			"type": "vector1"
 		}
 	],
 	"action_sets": [
@@ -227,6 +235,8 @@
 			"/actions/main/in/RightTrigger": "RightTrigger",
 			"/actions/main/in/Save": "Save",
 			"/actions/main/in/Menu": "Menu",
+			"/actions/main/in/MoveLeft axis": "MoveLeft",
+			"/actions/main/in/MoveRight axis": "MoveRight",
 			"/actions/main": "Main Game Actions"
 		}
 	]
